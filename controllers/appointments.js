@@ -186,7 +186,7 @@ exports.addAppointment = async (req, res, next) => {
       customer_email: user.email,
       line_items: items,
       metadata: {
-        orderId: appointment.id,
+        appointmentId: appointment.id,
       },
     });
 
@@ -202,6 +202,42 @@ exports.addAppointment = async (req, res, next) => {
       .status(500)
       .json({ success: false, message: "Cannot create Appointment" });
   }
+};
+
+//@desc  Pay appointment
+//@route POST /api/v1/appointments/:id/webhook
+//@access Private
+exports.payAppointment = async (req, res, next) => {
+  const body = req.body;
+  const signature = req.headers["stripe-signature"];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET || ""
+    );
+  } catch (error) {
+    console.log(`Webhook Error: ${error.message}`);
+    return res.status(400).send(`Webhook Error: ${error.message}`);
+  }
+
+  const session = event.data.object;
+  if (!session?.metadata?.appointmentId) {
+    console.log("Missing metadata");
+    return res.status(400).send("Missing metadata");
+  }
+
+  if (event.type === "checkout.session.completed") {
+    console.log("Payment was successful");
+    await Appointment.findByIdAndUpdate(session.metadata.appointmentId, {
+      status: "paid",
+    });
+    return res.status(200).json({ success: true });
+  }
+  res.status(200).json({ success: true });
 };
 
 //@desc   Update appointment
