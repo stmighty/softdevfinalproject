@@ -158,6 +158,17 @@ exports.addAppointment = async (req, res, next) => {
         });
       }
     }
+    
+    if (!restaurant.price) {
+        req.body.status = "paid";
+        const appointment = await Appointment.create(req.body);
+        
+        console.log("req.body is", req.body);
+        return res.status(200).json({
+          success: true,
+          data: appointment,
+        });
+    };
 
     req.body.status = "pending";
     const appointment = await Appointment.create(req.body);
@@ -191,7 +202,7 @@ exports.addAppointment = async (req, res, next) => {
     });
 
     console.log("req.body is", req.body);
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: appointment,
       stripe: stripeSession,
