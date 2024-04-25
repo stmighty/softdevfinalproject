@@ -25,6 +25,7 @@
     "mysql": "^2.18.1",
     "newman": "^6.1.2",
     "newman-reporter-htmlextra": "^1.23.1",
+    "stripe": "^15.3.0",
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^5.0.0",
     "uuid": "^7.0.3"

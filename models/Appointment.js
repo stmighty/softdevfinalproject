@@ -16,6 +16,11 @@ const AppointmentSchema = new mongoose.Schema({
         ref : "Restaurant",
         required : true
     },
+    status: {
+        type: String,
+        enum: ['pending', 'paid', 'cancelled'],
+        default: 'pending'
+    },
     createdAt : {
         type: Date,
         default : Date.now

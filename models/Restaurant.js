@@ -30,7 +30,12 @@ const RestaurantSchema = new mongoose.Schema({
 
     capacity: {
         type: Number,
-    }
+    },
+
+    price: {
+        type: Number,
+        required: [true, 'please add a price']
+    },
 },
 
 {
