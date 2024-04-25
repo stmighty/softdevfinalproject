@@ -2,7 +2,7 @@
 
 
 const express = require('express');
-const {getRestaurants, getRestaurant, createRestaurant, updateRestaurant, deleteRestaurant, getVacCenters} = require('../controllers/restaurants');
+const {getRestaurants, getRestaurant, createRestaurant, updateRestaurant, deleteRestaurant} = require('../controllers/restaurants');
 
 /**
  * @swagger
@@ -196,7 +196,6 @@ const swaggerJSDoc = require('swagger-jsdoc');
 router.use('/:restaurantId/appointments/', appointmentRouter);
 
 
-router.route('/vacCenters').get(getVacCenters);
 router.route('/').get(protect, getRestaurants).post(protect, authorize('admin'), createRestaurant);
 router.route('/:id').get(protect, getRestaurant).put(protect, authorize('admin'), updateRestaurant).delete(protect, authorize('admin'), deleteRestaurant);
 

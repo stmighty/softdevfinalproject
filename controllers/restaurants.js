@@ -1,5 +1,4 @@
 const Restaurant = require('../models/Restaurant.js');
-const vacCenter = require('../models/VacCenter.js');
 const { param } = require('../routes/restaurants.js');
 
 require('../models/Restaurant.js');
@@ -224,22 +223,3 @@ exports.createRestaurant = async (req,res,next) => {
 
 
 
-
-
-//@desc     Get vaccine center
-//route     Get /api/v1/restaurants/vacCenters/
-//@access   Public
-
-exports.getVacCenters = (req,res,next) => {
-    
-    vacCenter.getAll((err, data) => {
-        if(err) {
-            console.log("error :", err);
-            res.status(500).send({message: err.message || "Some error occured while retrieving Vaccine Centers"});
-        }
-
-        else {
-            res.send(data);
-        }
-    });
-};
